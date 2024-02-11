@@ -1,0 +1,201 @@
+version: 2
+
+models:
+    - name: components
+      description: "The components of the machines"
+      columns:
+        - name: component_id
+          type: integer
+          description: "The id of the component"
+          tests:
+            - unique
+            - dbt_constraints.primary_key
+        - name: component_name
+          type: string
+          description: "The name of the component"
+          tests:
+            - not_null
+    - name: failures
+      description: "The failures of the machines"
+      columns:
+        - name: failure_id
+          type: integer
+          description: "The id of the failure"
+          tests:
+            - unique
+            - not_null
+        - name: machine_id
+          type: integer
+          description: "The id of the failed machine"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('machine')
+                field: machine_id
+        - name: datetime
+          type: datetime
+          description: "The datetime of the failure"
+        - name: component_id
+          type: integer
+          description: "The id of the failed component"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('components')
+                field: component_id
+    - name: maint
+      description: "The maintenance of the machines"
+      columns:
+        - name: maint_id
+          type: integer
+          description: "The id of the maintenance"
+          tests:
+            - unique
+            - not_null
+        - name: datetime
+          type: datetime
+          description: "The datetime of the maintenance"
+          tests:
+            - not_null
+        - name: machine_id
+          type: integer
+          description: "The id of the maintained machine"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('machine')
+                field: machine_id
+        - name: component_id
+          type: integer
+          description: "The id of the maintained component"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('components')
+                field: component_id
+    - name: machine
+      description: "The machines"
+      columns:
+        - name: machine_id
+          type: integer
+          description: "The id of the machine"
+          tests:
+            - unique
+            - not_null
+            - dbt_constraints.primary_key
+        - name: manufacture_year
+          type: integer
+          description: "The year of manufacture"
+          tests:
+            - not_null
+        - name: model_key
+          type: string
+          description: "The model key"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('model')
+                field: model_key
+    - name: error
+      description: "The errors of the machines"
+      columns:
+        - name: error_key
+          type: integer
+          description: "The key of the error"
+          tests:
+            - unique
+            - not_null
+            - dbt_constraints.primary_key
+        - name: error_name
+          type: string
+          description: "The name of the error"
+          tests:
+            - not_null
+    - name: error_machine
+      description: "The errors of the machines"
+      columns:
+        - name: error_machine_id
+          type: integer
+          description: "The id of the error"
+          tests:
+            - unique
+            - not_null
+            - dbt_constraints.primary_key
+        - name: machine_id
+          type: integer
+          description: "The id of the machine"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('machine')
+                field: machine_id
+        - name: datetime
+          type: datetime
+          tests:
+            - not_null
+        - name: error_key
+          type: integer
+          description: the key of the error
+          tests:
+            - not_null
+            - relationships:
+                to: ref('error')
+                field: error_key
+    - name: telemetry
+      description: "The telemetry of the machines"
+      columns:
+        - name: telemetry_id
+          type: integer
+          description: "The id of the telemetry"
+          tests:
+            - unique
+            - not_null
+            - dbt_constraints.primary_key
+        - name: machine_id
+          type: integer
+          description: "The id of the machine"
+          tests:
+            - not_null
+            - relationships:
+                to: ref('machine')
+                field: machine_id
+        - name: datetime
+          type: datetime
+          description: "The datetime of the telemetry"
+          tests:
+            - not_null
+        - name: volt
+          type: float
+          description: "The voltage of the machine"
+          tests:
+            - not_null
+        - name: rotate
+          type: float
+          description: "The rotation of the machine"
+          tests:
+            - not_null
+        - name: pressure
+          type: float
+          description: "The pressure of the machine"
+          tests:
+            - not_null
+        - name: vibration
+          type: float
+          description: "The vibration of the machine"
+          tests:
+            - not_null
+    - name: model
+      description: "The models of the machines"
+      columns:
+      - name: model_key
+        type: string
+        description: "The key of the model"
+        tests:
+          - unique
+          - not_null
+          - dbt_constraints.primary_key
+      - name: model
+        type: string
+        description: "The name of the model"
+        tests:
+          - not_null
