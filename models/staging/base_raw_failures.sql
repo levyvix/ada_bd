@@ -1,13 +1,27 @@
-with source as (
-      select * from {{ source('raw', 'failures') }}
+WITH source AS (
+    SELECT
+        *
+    FROM
+        {{ source(
+            'raw',
+            'failures'
+        ) }}
 ),
-renamed as (
-    select
-        {{ adapter.quote("failure_id") }},
-        {{ adapter.quote("machineid") }} as machine_id,
+renamed AS (
+    SELECT
+        ROW_NUMBER() over (
+            ORDER BY
+                "machineID",
+                datetime,
+                failure
+        ) AS failure_id,
+        "machineID" AS machine_id,
         {{ adapter.quote("datetime") }},
-        {{ adapter.quote("failure") }} as component_name
-
-    from source
+        {{ adapter.quote("failure") }} AS component_name
+    FROM
+        source
 )
-select * from renamed
+SELECT
+    *
+FROM
+    renamed

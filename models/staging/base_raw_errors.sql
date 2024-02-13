@@ -9,10 +9,15 @@ WITH source AS (
 ),
 renamed AS (
     SELECT
-        {{ adapter.quote("error_id") }} AS error_id,
-        {{ adapter.quote("machineid") }} AS machine_id,
+        ROW_NUMBER() over (
+            ORDER BY
+                "machineID",
+                datetime,
+                "errorID"
+        ) AS error_id,
+        "machineID" AS machine_id,
         {{ adapter.quote("datetime") }} AS datetime,
-        {{ adapter.quote("errorid") }} AS error_name
+        {{ adapter.quote("errorID") }} AS error_name
     FROM
         source
 )

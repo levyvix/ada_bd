@@ -3,7 +3,7 @@ version: 2
 sources:
     - name: raw
       description: This is a replica of the Postgres database used by our app
-      database: postgres
+      database: home
       schema: kaggle
       tables:
           - name: machines

@@ -9,10 +9,15 @@ WITH source AS (
 ),
 renamed AS (
     SELECT
-        {{ adapter.quote("maint_id") }},
+        ROW_NUMBER() over(
+            ORDER BY
+                "machineID",
+                datetime,
+                "comp"
+        ) AS maint_id,
         {{ adapter.quote("datetime") }},
-        {{ adapter.quote("machineid") }} AS machine_id,
-        {{ adapter.quote("component") }}
+        "machineID" AS machine_id,
+        "comp" as component
     FROM
         source
 )

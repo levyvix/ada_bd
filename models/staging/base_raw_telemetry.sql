@@ -1,16 +1,24 @@
-with source as (
-      select * from {{ source('raw', 'telemetry') }}
+WITH source AS (
+    SELECT
+        *
+    FROM
+        {{ source(
+            'raw',
+            'telemetry'
+        ) }}
 ),
-renamed as (
-    select
+renamed AS (
+    SELECT
         {{ adapter.quote("datetime") }},
-        {{ adapter.quote("machineid") }} as machine_id,
+        "machineID" AS machine_id,
         {{ adapter.quote("volt") }},
         {{ adapter.quote("rotate") }},
         {{ adapter.quote("pressure") }},
         {{ adapter.quote("vibration") }}
-
-    from source
+    FROM
+        source
 )
-select * from renamed
-  
+SELECT
+    *
+FROM
+    renamed

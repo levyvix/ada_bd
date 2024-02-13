@@ -1,11 +1,21 @@
-with source as (
-      select * from {{ source('raw', 'machines') }}
+WITH source AS (
+    SELECT
+        *
+    FROM
+        {{ source(
+            'raw',
+            'machines'
+        ) }}
 ),
-renamed as (
-    select
-        {{ adapter.quote("machineid") }} as machine_id,
-        {{ adapter.quote("model") }} as model,
-        {{ adapter.quote("age") }} as age
-    from source
+renamed AS (
+    SELECT
+        "machineID" AS machine_id,
+        {{ adapter.quote("model") }} AS model,
+        {{ adapter.quote("age") }} AS age
+    FROM
+        source
 )
-select * from renamed
+SELECT
+    *
+FROM
+    renamed
