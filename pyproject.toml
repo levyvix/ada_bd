@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 dbt-postgres = "^1.7.7"
+sqlfluff = "^2.3.5"
+sqlfmt = "^0.0.3"
 
 
 [build-system]
